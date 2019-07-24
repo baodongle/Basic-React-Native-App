@@ -12,6 +12,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { 'extensions': ['.js', '.jsx'] }],
     'prettier/prettier': ['error', { 'trailingComma': 'es5', 'singleQuote': true, 'printWidth': 100 }],
     'react/prefer-stateless-function': [0],
+    'no-use-before-define': ['error', { 'variables': false }],
   },
   plugins: [
     'prettier',

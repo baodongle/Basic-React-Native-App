@@ -1,105 +1,128 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React, { Fragment } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-
+import React, { Component } from 'react';
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  FlatList,
+  Image,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-const App = () => {
-  return (
-    <Fragment>
-      <StatusBar barStyle="dark-content"/>
-      <SafeAreaView>
-        <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
-          <Header/>
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this screen and then
-                come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions/>
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions/>
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks/>
+const data = require('./assets/Info.json');
+
+export default class App extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.header}>Basic React Native App</Text>
+        <ScrollView>
+          <Text style={styles.title}>Top Ten Movies of IMDb</Text>
+          <View style={styles.album}>
+            <FlatList
+              data={data}
+              renderItem={({ item: { title, image, url } }) => {
+                return (
+                  <View style={styles.cardContainer}>
+                    <View style={styles.cardHeader}>
+                      <Text style={styles.cardTitle}>{title}</Text>
+                    </View>
+                    <View style={styles.cardImageContainer}>
+                      <Image source={{ uri: image }} style={styles.cardImage} />
+                    </View>
+                    <View style={styles.cardFooter}>
+                      <TouchableOpacity
+                        style={styles.cardButton}
+                        onPress={() => Linking.openURL(url)}
+                      >
+                        <Text style={styles.cardButtonText}>More Info</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              }}
+              keyExtractor={(item, index) => index.toString()}
+            />
           </View>
         </ScrollView>
-      </SafeAreaView>
-    </Fragment>
-  );
-};
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    flex: 1,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  header: {
+    backgroundColor: '#0097d6',
+    color: '#fff',
+    marginLeft: 0,
+    marginRight: 0,
+    fontSize: 25,
+    textAlign: 'center',
   },
-  body: {
-    backgroundColor: Colors.white,
+  title: {
+    textAlign: 'center',
+    fontSize: 20,
+    marginTop: 15,
+    marginBottom: 15,
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  album: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  cardContainer: {
+    borderRadius: 2,
+    borderWidth: 1,
+    borderColor: '#d6d7da',
+    marginBottom: 10,
+    alignSelf: 'stretch',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  sectionDescription: {
-    marginTop: 8,
+  cardHeader: {
+    borderBottomWidth: 1,
+    borderColor: '#d6d7da',
+  },
+  cardTitle: {
+    margin: 5,
     fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
   },
-  highlight: {
-    fontWeight: '700',
+  cardImageContainer: {
+    flex: 1,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 400,
   },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
+  cardImage: {
+    flex: 1,
+    width: '100%',
+    height: 200,
+  },
+  cardFooter: {
+    borderTopWidth: 1,
+    borderColor: '#d6d7da',
+  },
+  cardButton: {
+    borderRadius: 4,
+    borderWidth: 1,
+    margin: 15,
+    marginTop: 5,
+    marginBottom: 5,
+    borderColor: '#478dff',
+    padding: 10,
+  },
+  cardButtonText: {
+    color: '#007afa',
+    fontSize: 20,
     fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+    alignSelf: 'center',
   },
 });
-
-export default App;
