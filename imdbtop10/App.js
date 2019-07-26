@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Linking,
@@ -13,6 +14,41 @@ import {
 const data = require('./assets/Info.json');
 
 export default class App extends Component {
+  state = {
+    loading: true,
+  };
+
+  handleLoad = () => {
+    this.setState({ loading: false });
+  };
+
+  renderCard = ({ item }) => {
+    const { title, image, url } = item;
+    const { loading } = this.state;
+
+    return (
+      <View style={styles.cardContainer}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>{title}</Text>
+        </View>
+        <View style={styles.cardImageContainer}>
+          {loading && <ActivityIndicator style={StyleSheet.absoluteFill} size="large" />}
+          <Image source={{ uri: image }} onLoad={this.handleLoad} style={styles.cardImage} />
+        </View>
+        <View style={styles.cardFooter}>
+          <TouchableOpacity
+            style={styles.cardButton}
+            onPress={() => {
+              Linking.openURL(url).catch(err => console.error('An error occurred', err));
+            }}
+          >
+            <Text style={styles.cardButtonText}>More Info</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -22,26 +58,7 @@ export default class App extends Component {
           <View style={styles.album}>
             <FlatList
               data={data}
-              renderItem={({ item: { title, image, url } }) => {
-                return (
-                  <View style={styles.cardContainer}>
-                    <View style={styles.cardHeader}>
-                      <Text style={styles.cardTitle}>{title}</Text>
-                    </View>
-                    <View style={styles.cardImageContainer}>
-                      <Image source={{ uri: image }} style={styles.cardImage} />
-                    </View>
-                    <View style={styles.cardFooter}>
-                      <TouchableOpacity
-                        style={styles.cardButton}
-                        onPress={() => Linking.openURL(url)}
-                      >
-                        <Text style={styles.cardButtonText}>More Info</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                );
-              }}
+              renderItem={this.renderCard}
               keyExtractor={(item, index) => index.toString()}
             />
           </View>
@@ -58,30 +75,25 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#0097d6',
     color: '#fff',
-    marginLeft: 0,
-    marginRight: 0,
     fontSize: 25,
     textAlign: 'center',
   },
   title: {
     textAlign: 'center',
     fontSize: 20,
-    marginTop: 15,
-    marginBottom: 15,
+    marginVertical: 15,
   },
   album: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 5,
+    paddingHorizontal: 5,
   },
   cardContainer: {
     borderRadius: 2,
     borderWidth: 1,
     borderColor: '#d6d7da',
-    marginBottom: 10,
+    marginVertical: 5,
     alignSelf: 'stretch',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
@@ -104,7 +116,7 @@ const styles = StyleSheet.create({
   cardImage: {
     flex: 1,
     width: '100%',
-    height: 200,
+    height: 300,
   },
   cardFooter: {
     borderTopWidth: 1,
@@ -113,9 +125,8 @@ const styles = StyleSheet.create({
   cardButton: {
     borderRadius: 4,
     borderWidth: 1,
-    margin: 15,
-    marginTop: 5,
-    marginBottom: 5,
+    marginHorizontal: 15,
+    marginVertical: 5,
     borderColor: '#478dff',
     padding: 10,
   },
