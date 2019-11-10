@@ -1,5 +1,7 @@
 # Basic React Native App 
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/baodongle/Basic-React-Native-App.svg)](https://greenkeeper.io/)
+
 ### Mission
 
 You have to develop a React Native app that will work in both iOS and Android platforms. For convenience we are only going to test the app in iOS iPhone simulator. Your app will query a local JSON file and create a list of movies that are voted as top 10 movies of all time in IMDb.
