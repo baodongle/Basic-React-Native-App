@@ -1,0 +1,9 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "imdbtop10/package.json"
+      ]
+    }
+  }
+}
